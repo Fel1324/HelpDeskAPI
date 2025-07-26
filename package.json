@@ -4,7 +4,7 @@
   "description": "Projeto desenvolvimento como desafio prático final pela formação Full-Stack da Rocketseat.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsx watch --env-file .env ./src/server.ts"
   },
   "keywords": [],
   "author": "",
