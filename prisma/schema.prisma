@@ -6,3 +6,109 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum UserRole {
+  admin
+  technical
+  customer
+}
+
+enum TicketStatus {
+  aberto
+  emAtendimento @map("em_atendimento")
+  encerrado
+}
+
+enum ServiceStatus {
+  ativo
+  inativo
+}
+
+model User {
+  id String @id @default(uuid()) 
+  name String
+  Email String @unique
+  Password String
+  Avatar String?
+  Role UserRole @default(customer)
+
+  ticketsAsCustomer Ticket[] @relation("CustomerRelation")
+  ticketsAsTechnical Ticket[] @relation("TechnicalRelation")
+  technicalTimes TechnicalTime[] @relation("TechnicalRelation")
+  services Service[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model Time {
+  id Int @id @default(autoincrement())
+  time String @unique
+
+  timeTechnicians TechnicalTime[]
+}
+
+model TechnicalTime {
+  technicalId String @map("technical_id")
+  timeId Int @map("time_id")
+
+  technical User @relation("TechnicalRelation", fields: [technicalId], references: [id])
+  time Time @relation(fields: [timeId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([technicalId, timeId])
+  @@map("technical_times")
+}
+
+model Ticket {
+  id String @id @default(uuid())
+  title String
+  description String
+  status TicketStatus @default(aberto)
+
+  createdBy String @map("created_by")
+  assignedTo String @map("assigned_to")
+
+  customer User @relation("CustomerRelation", fields: [createdBy], references: [id])
+  technical User @relation("TechnicalRelation", fields: [assignedTo], references: [id])
+
+  ticketServices TicketService[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("tickets")
+}
+
+model Service {
+  id String @id @default(uuid())
+  title String
+  price Float
+  status ServiceStatus @default(ativo)
+
+  createdBy String @map("created_by")
+  user User @relation(fields: [createdBy], references: [id])
+
+  serviceTickets TicketService[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime? @updatedAt @map("updated_at")
+
+  @@map("services")
+}
+
+model TicketService {
+  ticketId String @map("ticket_id")
+  serviceId String @map("service_id")
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([ticketId, serviceId])
+  @@map("ticket_services")
+}
