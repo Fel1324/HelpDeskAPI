@@ -9,7 +9,7 @@ datasource db {
 
 enum UserRole {
   admin
-  technical
+  technician
   customer
 }
 
@@ -27,14 +27,14 @@ enum ServiceStatus {
 model User {
   id String @id @default(uuid()) 
   name String
-  Email String @unique
-  Password String
-  Avatar String?
-  Role UserRole @default(customer)
+  email String @unique
+  password String
+  avatar String?
+  role UserRole @default(customer)
 
   ticketsAsCustomer Ticket[] @relation("CustomerRelation")
-  ticketsAsTechnical Ticket[] @relation("TechnicalRelation")
-  technicalTimes TechnicalTime[] @relation("TechnicalRelation")
+  ticketsAsTechnicians Ticket[] @relation("TechnicianRelation")
+  TechnicianTimes TechnicianTime[] @relation("TechnicianRelation")
   services Service[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -47,20 +47,20 @@ model Time {
   id Int @id @default(autoincrement())
   time String @unique
 
-  timeTechnicians TechnicalTime[]
+  timeTechnicians TechnicianTime[]
 }
 
-model TechnicalTime {
-  technicalId String @map("technical_id")
+model TechnicianTime {
+  technicianId String @map("technician_id")
   timeId Int @map("time_id")
 
-  technical User @relation("TechnicalRelation", fields: [technicalId], references: [id])
+  technician User @relation("TechnicianRelation", fields: [technicianId], references: [id])
   time Time @relation(fields: [timeId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
 
-  @@unique([technicalId, timeId])
-  @@map("technical_times")
+  @@unique([technicianId, timeId])
+  @@map("technician_times")
 }
 
 model Ticket {
@@ -73,7 +73,7 @@ model Ticket {
   assignedTo String @map("assigned_to")
 
   customer User @relation("CustomerRelation", fields: [createdBy], references: [id])
-  technical User @relation("TechnicalRelation", fields: [assignedTo], references: [id])
+  technician User @relation("TechnicianRelation", fields: [assignedTo], references: [id])
 
   ticketServices TicketService[]
 
