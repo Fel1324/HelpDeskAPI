@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { prisma } from "@/database/prisma";
 import { UserRole } from "@prisma/client";
 import { hash } from "bcrypt";
 import { z } from "zod";
 
+import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/app-error";
 
 const { admin, customer, technician } = UserRole;
@@ -37,7 +37,8 @@ export class UsersController {
 
     if (userWithSameEmail) {
       throw new AppError(
-        "E-mail inválido! Já existe um usuário com este e-mail!"
+        "E-mail inválido! Já existe um usuário com este e-mail!",
+        409
       );
     }
 
