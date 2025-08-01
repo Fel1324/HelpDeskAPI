@@ -10,6 +10,10 @@ const { admin, customer, technician } = UserRole;
 
 export class UsersController {
   async create(req: Request, res: Response) {
+    const userRoles = req.user ? [technician] : [admin, customer, technician]
+    const userRoleDefault = req.user ? technician : customer
+    const userRolesMessage = req.user ? "Opção disponível: technician" : "Opções disponíveis: admin, customer, technician"
+
     const bodySchema = z.object({
       name: z
         .string("Nome é obrigatório")
@@ -23,10 +27,10 @@ export class UsersController {
         .min(6, "Senha deve conter pelo menos 6 caracteres"),
       role: z
         .enum(
-          [admin, customer, technician],
-          "Opções disponíveis: admin, customer, technician"
+          userRoles,
+          userRolesMessage
         )
-        .default(customer),
+        .default(userRoleDefault),
     });
 
     const { name, email, password, role } = bodySchema.parse(req.body);
