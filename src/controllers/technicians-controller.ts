@@ -6,7 +6,7 @@ import { z } from "zod";
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/app-error";
 
-const { admin, customer } = UserRole;
+const { technician } = UserRole;
 
 export class UsersController {
   async create(req: Request, res: Response) {
@@ -22,11 +22,8 @@ export class UsersController {
         .string("Senha é obrigatória")
         .min(6, "Senha deve conter pelo menos 6 caracteres"),
       role: z
-        .enum(
-          [admin, customer],
-          "Opções disponíveis: admin e customer"
-        )
-        .default(customer),
+        .enum([technician], "Opção disponível: technician")
+        .default(technician),
     });
 
     const { name, email, password, role } = bodySchema.parse(req.body);
