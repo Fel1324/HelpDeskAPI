@@ -23,7 +23,7 @@ export class UsersController {
         .min(6, "Senha deve conter pelo menos 6 caracteres"),
       role: z
         .enum([technician], "Opção disponível: technician")
-        .default(technician),
+        .default(technician)
     });
 
     const { name, email, password, role } = bodySchema.parse(req.body);
@@ -41,7 +41,7 @@ export class UsersController {
 
     const hashedPassword = await hash(password, 10);
 
-    const user = await prisma.user.create({
+    const tech = await prisma.user.create({
       data: {
         name,
         email,
@@ -50,9 +50,9 @@ export class UsersController {
       },
     });
 
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, ...techWithoutPassword } = tech;
 
-    res.status(201).json(userWithoutPassword);
+    res.status(201).json(techWithoutPassword);
     return;
   }
 }

@@ -7,7 +7,7 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
 
 - Feats Admin:
   - Criar técnicos
-    - Atribuir horário de disponibilidade
+  - Atribuir horário de disponibilidade
   - Listar técnicos
   - Editar técnicos
 

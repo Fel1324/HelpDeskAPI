@@ -9,6 +9,6 @@ const techniciansController = new UsersController()
 techniciansRoutes.use(verifyUserAuthorization(["admin"]))
 
 techniciansRoutes.post("/", techniciansController.create)
-techniciansRoutes.get("/", techniciansController.create)
+// techniciansRoutes.get("/", techniciansController.create)
 
 export { techniciansRoutes }
