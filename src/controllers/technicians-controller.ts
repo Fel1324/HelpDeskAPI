@@ -8,6 +8,27 @@ import { AppError } from "@/utils/app-error";
 const COMERCIAL_TIME = [2, 3, 4, 5, 8, 9, 10, 11];
 
 export class TechniciansController {
+  async index(req: Request, res: Response) {
+    const technicians = await prisma.user.findMany({
+      omit: {
+        password: true
+      },
+      where: {
+        role: "technician"
+      },
+      include: {
+        TechnicianTimes: {
+          select: {
+            time: true
+          }
+        }
+      }
+    })
+    
+    res.json(technicians);
+    return;
+  }
+
   async create(req: Request, res: Response) {
     const bodySchema = z.object({
       name: z

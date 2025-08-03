@@ -30,3 +30,6 @@ Authorization: Bearer {{jwt_token}}
   "role": "aaaa",
   "timeIds": []
 }
+
+GET http://localhost:3333/technicians
+Authorization: Bearer {{jwt_token}}

@@ -8,7 +8,7 @@ const techniciansController = new TechniciansController()
 
 techniciansRoutes.use(verifyUserAuthorization(["admin"]))
 
+techniciansRoutes.get("/", techniciansController.index)
 techniciansRoutes.post("/", techniciansController.create)
-// techniciansRoutes.get("/", techniciansController.create)
 
 export { techniciansRoutes }
