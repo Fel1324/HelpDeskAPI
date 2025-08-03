@@ -1,0 +1,32 @@
+# @name users
+POST http://localhost:3333/users
+Content-Type: application/json
+
+{
+  "name": "José",
+  "email": "jose@email.com",
+  "password": "123456"
+}
+
+# @name sessions
+POST http://localhost:3333/sessions
+Content-Type: application/json
+
+{
+  "email": "user.adm@email.com",
+  "password": "admin123321"
+}
+
+# @name technicians
+@jwt_token = {{sessions.response.body.token}}
+POST http://localhost:3333/technicians
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "Gabriel",
+  "email": "gabriel.tech@email.com",
+  "password": "123456",
+  "role": "aaaa",
+  "timeIds": []
+}

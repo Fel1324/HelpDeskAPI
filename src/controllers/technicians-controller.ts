@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
-import { UserRole } from "@prisma/client";
 import { hash } from "bcrypt";
 import { z } from "zod";
 
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/app-error";
 
-const { technician } = UserRole;
+const COMERCIAL_TIME = [2, 3, 4, 5, 8, 9, 10, 11];
 
-export class UsersController {
+export class TechniciansController {
   async create(req: Request, res: Response) {
     const bodySchema = z.object({
       name: z
@@ -21,12 +20,10 @@ export class UsersController {
       password: z
         .string("Senha é obrigatória")
         .min(6, "Senha deve conter pelo menos 6 caracteres"),
-      role: z
-        .enum([technician], "Opção disponível: technician")
-        .default(technician)
+      timeIds: z.array(z.int()),
     });
 
-    const { name, email, password, role } = bodySchema.parse(req.body);
+    const { name, email, password, timeIds } = bodySchema.parse(req.body);
 
     const userWithSameEmail = await prisma.user.findFirst({
       where: { email },
@@ -41,12 +38,23 @@ export class UsersController {
 
     const hashedPassword = await hash(password, 10);
 
+    if (!timeIds.length) {
+      timeIds.push(...COMERCIAL_TIME);
+    }
+
     const tech = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        role,
+        role: "technician",
+        TechnicianTimes: {
+          createMany: {
+            data: timeIds.map((id) => ({
+              timeId: id,
+            })),
+          },
+        },
       },
     });
 

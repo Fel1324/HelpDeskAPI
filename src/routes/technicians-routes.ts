@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import { UsersController } from "@/controllers/users-controller";
 import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization";
+import { TechniciansController } from "@/controllers/technicians-controller";
 
 const techniciansRoutes = Router();
-const techniciansController = new UsersController()
+const techniciansController = new TechniciansController()
 
 techniciansRoutes.use(verifyUserAuthorization(["admin"]))
 

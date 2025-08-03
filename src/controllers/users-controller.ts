@@ -1,12 +1,9 @@
 import { Request, Response } from "express";
-import { UserRole } from "@prisma/client";
 import { hash } from "bcrypt";
 import { z } from "zod";
 
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/app-error";
-
-const { admin, customer } = UserRole;
 
 export class UsersController {
   async create(req: Request, res: Response) {
@@ -21,15 +18,9 @@ export class UsersController {
       password: z
         .string("Senha é obrigatória")
         .min(6, "Senha deve conter pelo menos 6 caracteres"),
-      role: z
-        .enum(
-          [admin, customer],
-          "Opções disponíveis: admin e customer"
-        )
-        .default(customer),
     });
 
-    const { name, email, password, role } = bodySchema.parse(req.body);
+    const { name, email, password } = bodySchema.parse(req.body);
 
     const userWithSameEmail = await prisma.user.findFirst({
       where: { email },
@@ -49,7 +40,7 @@ export class UsersController {
         name,
         email,
         password: hashedPassword,
-        role,
+        role: "customer",
       },
     });
 
