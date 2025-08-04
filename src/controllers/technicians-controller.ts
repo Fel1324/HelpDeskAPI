@@ -11,20 +11,20 @@ export class TechniciansController {
   async index(req: Request, res: Response) {
     const technicians = await prisma.user.findMany({
       omit: {
-        password: true
+        password: true,
       },
       where: {
-        role: "technician"
+        role: "technician",
       },
       include: {
         TechnicianTimes: {
           select: {
-            time: true
-          }
-        }
-      }
-    })
-    
+            time: true,
+          },
+        },
+      },
+    });
+
     res.json(technicians);
     return;
   }
@@ -82,6 +82,52 @@ export class TechniciansController {
     const { password: _, ...techWithoutPassword } = tech;
 
     res.status(201).json(techWithoutPassword);
+    return;
+  }
+
+  async update(req: Request, res: Response) {
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado!", 404);
+    }
+
+    if (user.role !== "technician") {
+      throw new AppError("O usuário informado não é técnico!");
+    }
+
+    const bodySchema = z.object({
+      timeIds: z.array(z.int()).nonempty("Informe ao menos um horário!"),
+    });
+
+    const { timeIds } = bodySchema.parse(req.body);
+
+    await prisma.$transaction(async (tx) => {
+      await tx.technicianTime.deleteMany({
+        where: {
+          technicianId: id,
+        },
+      });
+
+      await tx.technicianTime.createMany({
+        data: timeIds.map((timeId) => ({
+          technicianId: id,
+          timeId,
+        })),
+      });
+    });
+
+    res.json();
     return;
   }
 }
