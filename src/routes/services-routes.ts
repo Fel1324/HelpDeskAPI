@@ -8,6 +8,9 @@ const servicesController = new ServicesController();
 
 servicesRoutes.use(verifyUserAuthorization(["admin"]));
 
+servicesRoutes.get("/", servicesController.index);
 servicesRoutes.post("/", servicesController.create);
+servicesRoutes.put("/:id", servicesController.update);
+servicesRoutes.patch("/:id", servicesController.updateStatus);
 
 export { servicesRoutes };

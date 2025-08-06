@@ -43,6 +43,9 @@ Authorization: Bearer {{jwt_token}}
 }
 
 # @name Services
+GET http://localhost:3333/services
+Authorization: Bearer {{jwt_token}}
+
 POST http://localhost:3333/services
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
@@ -50,4 +53,21 @@ Authorization: Bearer {{jwt_token}}
 {
   "title": "Instalação de Rede",
   "price": 100
+}
+
+PUT http://localhost:3333/services/d4c0b1ef-24b0-4a51-935c-f9e04aa84778
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "Recuperação de Dados",
+  "price": 200
+}
+
+PATCH http://localhost:3333/services/d4c0b1ef-24b0-4a51-935c-f9e04aa84778
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "status": "ativo"
 }

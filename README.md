@@ -13,11 +13,16 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
     - *Editar técnicos (X)*
 
   - > Serviços
-    - Criar Serviços
-    - Listar Serviços
-    - Editar Serviços
-    - Desativar Serviços
-      - Utilizar Soft Delete
+    - *Criar Serviços*
+    - *Listar Serviços*
+    - *Editar Serviços*
+    - *Desativar Serviços*
+
+  - > Clientes
+    - Listar clientes
+    - Editar clientes
+    - Excluir clientes
+      - Excluir seus chamados
 
 - Feats Técnicos:
 
