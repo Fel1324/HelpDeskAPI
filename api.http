@@ -1,3 +1,5 @@
+@jwt_token = {{sessions.response.body.token}}
+
 # @name users
 POST http://localhost:3333/users
 Content-Type: application/json
@@ -16,8 +18,6 @@ Content-Type: application/json
   "email": "user.adm@email.com",
   "password": "admin123321"
 }
-
-@jwt_token = {{sessions.response.body.token}}
 
 # @name technicians
 GET http://localhost:3333/technicians
@@ -46,3 +46,8 @@ Authorization: Bearer {{jwt_token}}
 POST http://localhost:3333/services
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "Instalação de Rede",
+  "price": 100
+}
