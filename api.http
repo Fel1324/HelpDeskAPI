@@ -17,9 +17,9 @@ Content-Type: application/json
   "password": "admin123321"
 }
 
-# @name technicians
 @jwt_token = {{sessions.response.body.token}}
 
+# @name technicians
 GET http://localhost:3333/technicians
 Authorization: Bearer {{jwt_token}}
 
@@ -41,3 +41,8 @@ Authorization: Bearer {{jwt_token}}
 {
   "timeIds": [1, 2, 3, 4, 5, 6, 7]
 }
+
+# @name Services
+POST http://localhost:3333/services
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}

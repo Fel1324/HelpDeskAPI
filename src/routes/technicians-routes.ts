@@ -1,7 +1,7 @@
 import { Router } from "express";
 
-import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization";
 import { TechniciansController } from "@/controllers/technicians-controller";
+import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization";
 
 const techniciansRoutes = Router();
 const techniciansController = new TechniciansController();

@@ -6,10 +6,18 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
 - *Criar os middlewares de autenticação e autorização (X)* 
 
 - Feats Admin:
-  - Criar técnicos
-  - Atribuir horário de disponibilidade
-  - Listar técnicos
-  - Editar técnicos
+  - > Técnicos:
+    - *Criar técnicos (X)*
+      - *Atribuir horário de disponibilidade e Senha (X)*
+    - *Listar técnicos (X)*
+    - *Editar técnicos (X)*
+
+  - > Serviços
+    - Criar Serviços
+    - Listar Serviços
+    - Editar Serviços
+    - Desativar Serviços
+      - Utilizar Soft Delete
 
 - Feats Técnicos:
 
