@@ -24,6 +24,10 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
     - Excluir clientes
       - Excluir seus chamados
 
+  - > Chamados
+    - Listar todos os chamados
+    - Editar status dos chamados
+
 - Feats Técnicos:
 
 - Feats Cliente:

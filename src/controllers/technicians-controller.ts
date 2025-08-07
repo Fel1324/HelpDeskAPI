@@ -44,10 +44,23 @@ export class TechniciansController {
       password: z
         .string("Senha é obrigatória")
         .min(6, "Senha deve conter pelo menos 6 caracteres"),
-      timeIds: z.array(z.int()),
+      timeIds: z.array(
+        z
+          .int("Horário inválido! Horários disponíveis: 07:00 até 23:00")
+          .positive("Horário inválido! Horários disponíveis: 07:00 até 23:00")
+      ),
     });
 
     const { name, email, password, timeIds } = bodySchema.parse(req.body);
+
+    if (timeIds.find((time) => time > 17)) {
+      throw new AppError(
+        "Horário inválido! Horários disponíveis: 07:00 até 23:00"
+      );
+    }
+
+    const setTimeIds = new Set(timeIds);
+    const newTimeIds = [...setTimeIds];
 
     const userWithSameEmail = await prisma.user.findFirst({
       where: { email },
@@ -62,8 +75,8 @@ export class TechniciansController {
 
     const hashedPassword = await hash(password, 10);
 
-    if (!timeIds.length) {
-      timeIds.push(...COMERCIAL_TIME);
+    if (!newTimeIds.length) {
+      newTimeIds.push(...COMERCIAL_TIME);
     }
 
     const tech = await prisma.user.create({
@@ -74,7 +87,7 @@ export class TechniciansController {
         role: "technician",
         TechnicianTimes: {
           createMany: {
-            data: timeIds.map((id) => ({
+            data: newTimeIds.map((id) => ({
               timeId: id,
             })),
           },
@@ -114,10 +127,25 @@ export class TechniciansController {
       email: z
         .email("E-mail inválido, siga o modelo: email@example.com")
         .toLowerCase(),
-      timeIds: z.array(z.int()).nonempty("Informe ao menos um horário!"),
+      timeIds: z
+        .array(
+          z
+            .int("Horário inválido! Horários disponíveis: 07:00 até 23:00")
+            .positive("Horário inválido! Horários disponíveis: 07:00 até 23:00")
+        )
+        .nonempty("Informe ao menos um horário!"),
     });
 
     const { name, email, timeIds } = bodySchema.parse(req.body);
+
+    if (timeIds.find((time) => time > 17)) {
+      throw new AppError(
+        "Horário inválido! Horários disponíveis: 07:00 até 23:00"
+      );
+    }
+
+    const setTimeIds = new Set(timeIds);
+    const newTimeIds = [...setTimeIds];
 
     await prisma.user.update({
       where: {
@@ -125,7 +153,7 @@ export class TechniciansController {
       },
       data: {
         name,
-        email
+        email,
       },
     });
 
@@ -137,7 +165,7 @@ export class TechniciansController {
       });
 
       await tx.technicianTime.createMany({
-        data: timeIds.map((timeId) => ({
+        data: newTimeIds.map((timeId) => ({
           technicianId: id,
           timeId,
         })),
