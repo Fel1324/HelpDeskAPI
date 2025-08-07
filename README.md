@@ -19,8 +19,8 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
     - *Desativar Serviços*
 
   - > Clientes
-    - Listar clientes
-    - Editar clientes
+    - *Listar clientes*
+    - *Editar clientes*
     - Excluir clientes
       - Excluir seus chamados
 

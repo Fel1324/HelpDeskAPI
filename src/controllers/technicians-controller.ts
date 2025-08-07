@@ -23,6 +23,9 @@ export class TechniciansController {
           },
         },
       },
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
 
     res.json(technicians);
@@ -95,22 +98,36 @@ export class TechniciansController {
     const user = await prisma.user.findUnique({
       where: {
         id,
+        role: "technician",
       },
     });
 
     if (!user) {
-      throw new AppError("Usuário não encontrado!", 404);
-    }
-
-    if (user.role !== "technician") {
-      throw new AppError("O usuário informado não é técnico!");
+      throw new AppError("Técnico não encontrado!", 404);
     }
 
     const bodySchema = z.object({
+      name: z
+        .string("Nome é obrigatório!")
+        .trim()
+        .min(2, "Nome deve conter no mínimo 2 caracteres!"),
+      email: z
+        .email("E-mail inválido, siga o modelo: email@example.com")
+        .toLowerCase(),
       timeIds: z.array(z.int()).nonempty("Informe ao menos um horário!"),
     });
 
-    const { timeIds } = bodySchema.parse(req.body);
+    const { name, email, timeIds } = bodySchema.parse(req.body);
+
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        email
+      },
+    });
 
     await prisma.$transaction(async (tx) => {
       await tx.technicianTime.deleteMany({

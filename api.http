@@ -31,15 +31,17 @@ Authorization: Bearer {{jwt_token}}
   "name": "Rafael",
   "email": "rafael.tech@email.com",
   "password": "123456",
-  "timeIds": [1, 2, 3, 4, 5, 8, 9, 10, 11, 12]
+  "timeIds": []
 }
 
-PUT http://localhost:3333/technicians/3a2b8b79-d615-4085-be80-76e81f0a7173
+PUT http://localhost:3333/technicians/56db04e8-3114-4bf9-ab66-fdb265df095b
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "timeIds": [1, 2, 3, 4, 5, 6, 7]
+  "name": "Gabriel",
+  "email": "gabriel@tech.com",
+  "timeIds": [13, 14, 15, 16, 17]
 }
 
 # @name Services
@@ -70,4 +72,17 @@ Authorization: Bearer {{jwt_token}}
 
 {
   "status": "ativo"
+}
+
+# @name Customers
+GET http://localhost:3333/customers
+Authorization: Bearer {{jwt_token}}
+
+PUT http://localhost:3333/customers/81d719d1-553b-4b09-aa64-a7d2ca6d7a72
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "name": "José",
+  "email": "jose@client.com"
 }
