@@ -46,6 +46,7 @@ model User {
 model Time {
   id Int @id
   time String @unique
+  minutes Int
 
   timeTechnicians TechnicianTime[]
 }
