@@ -34,7 +34,7 @@ model User {
 
   ticketsAsCustomer Ticket[] @relation("CustomerRelation")
   ticketsAsTechnicians Ticket[] @relation("TechnicianRelation")
-  TechnicianTimes TechnicianTime[] @relation("TechnicianRelation")
+  technicianTimes TechnicianTime[] @relation("TechnicianRelation")
   services Service[]
 
   createdAt DateTime @default(now()) @map("created_at")

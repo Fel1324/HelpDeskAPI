@@ -17,9 +17,14 @@ export class TechniciansController {
         role: "technician",
       },
       include: {
-        TechnicianTimes: {
+        technicianTimes: {
           select: {
-            time: true,
+            time: {
+              select: {
+                time: true,
+                minutes: true,
+              },
+            },
           },
         },
       },
@@ -85,7 +90,7 @@ export class TechniciansController {
         email,
         password: hashedPassword,
         role: "technician",
-        TechnicianTimes: {
+        technicianTimes: {
           createMany: {
             data: newTimeIds.map((id) => ({
               timeId: id,
