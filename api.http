@@ -19,8 +19,8 @@ POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "user.adm@email.com",
-  "password": "admin123321"
+  "email": "rafael@email.com",
+  "password": "123456"
 }
 
 ################################################
@@ -98,3 +98,13 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ################################################
+# @name Tickets
+POST http://localhost:3333/tickets
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "Instalação de Rede",
+  "description": "Instalação de rede via cabo",
+  "serviceId": "9cfa375d-c3b6-49a0-b97c-a201e1477edb"
+}
