@@ -30,8 +30,8 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
 
 - Feats Cliente:
   - *Criar conta*
-  - Criar chamados
-    - atribuir a um técnico disponível durante a criação do chamado
+  - *Criar chamados*
+    - *atribuir a um técnico disponível durante a criação do chamado*
   - Visualizar seus chamados
   - Excluir a própria conta
     - Excluir seus chamados

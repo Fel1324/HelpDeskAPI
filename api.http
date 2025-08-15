@@ -19,9 +19,15 @@ POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "rafael@email.com",
-  "password": "123456"
+  "email": "user.adm@email.com",
+  "password": "admin123321"
 }
+
+################################################
+
+# @name times
+GET http://localhost:3333/times
+Authorization: Bearer {{jwt_token}}
 
 ################################################
 

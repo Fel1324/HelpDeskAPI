@@ -9,10 +9,29 @@ const { ativo, inativo } = ServiceStatus;
 
 export class ServicesController {
   async index(req: Request, res: Response) {
-    const services = await prisma.service.findMany();
+    if (!req.user) {
+      throw new AppError("Não autorizado!", 401);
+    }
 
-    res.json(services);
-    return;
+    if (req.user.role === "admin") {
+      const services = await prisma.service.findMany();
+
+      res.json(services);
+      return;
+    }
+
+    if (req.user.role === "customer") {
+      const services = await prisma.service.findMany({
+        select: {
+          id: true,
+          title: true,
+          price: true,
+        },
+      });
+
+      res.json(services);
+      return;
+    }
   }
 
   async create(req: Request, res: Response) {
