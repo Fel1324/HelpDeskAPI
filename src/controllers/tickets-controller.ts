@@ -32,6 +32,7 @@ export class TicketsController {
     const service = await prisma.service.findUnique({
       where: {
         id: serviceId,
+        status: "ativo",
       },
     });
 
@@ -39,10 +40,59 @@ export class TicketsController {
       throw new AppError("Serviço não encontrado!", 404);
     }
 
-    const date = new Date();
-    console.log(date);
+    const hoursTicket = new Date().getHours();
+    const minutesTicket = hoursTicket * 60;
 
-    res.status(201).json({ message: "ok" });
+    const technician = await prisma.user.findFirst({
+      where: {
+        role: "technician",
+        technicianTimes: {
+          some: {
+            time: {
+              minutes: {
+                equals: minutesTicket,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        lastAssignedAt: "asc",
+      },
+    });
+
+    console.log(technician);
+
+    if (!technician) {
+      throw new AppError("Nenhum técnico disponível no momento!", 404);
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.ticket.create({
+        data: {
+          title,
+          description,
+          createdBy,
+          assignedTo: technician.id,
+          ticketServices: {
+            create: {
+              serviceId: serviceId,
+            },
+          },
+        },
+      });
+
+      await tx.user.update({
+        where: {
+          id: technician.id,
+        },
+        data: {
+          lastAssignedAt: new Date(),
+        },
+      });
+    });
+
+    res.status(201).json();
     return;
   }
 }

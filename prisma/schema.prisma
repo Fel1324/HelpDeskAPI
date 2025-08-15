@@ -31,6 +31,7 @@ model User {
   password String
   avatar String?
   role UserRole
+  lastAssignedAt DateTime? @map("last_assigned_at")
 
   ticketsAsCustomer Ticket[] @relation("CustomerRelation")
   ticketsAsTechnicians Ticket[] @relation("TechnicianRelation")

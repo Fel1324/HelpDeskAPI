@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/app-error";
 
-const COMERCIAL_TIME = [2, 3, 4, 5, 8, 9, 10, 11];
+const COMERCIAL_TIME = [1, 2, 3, 4, 5, 8, 9, 10, 11, 18];
 
 export class TechniciansController {
   async index(req: Request, res: Response) {

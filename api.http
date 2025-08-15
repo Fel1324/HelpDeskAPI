@@ -106,5 +106,5 @@ Authorization: Bearer {{jwt_token}}
 {
   "title": "Instalação de Rede",
   "description": "Instalação de rede via cabo",
-  "serviceId": "9cfa375d-c3b6-49a0-b97c-a201e1477edb"
+  "serviceId": "f781e233-10df-42ab-9489-2bd626324e8b"
 }
