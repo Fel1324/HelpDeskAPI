@@ -1,13 +1,128 @@
 import { Request, Response } from "express";
 import { z } from "zod";
 
-import { TicketStatus } from "@prisma/client";
 import { AppError } from "@/utils/app-error";
 import { prisma } from "@/database/prisma";
 
-const { aberto, emAtendimento, encerrado } = TicketStatus;
-
 export class TicketsController {
+  async index(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
+
+    if (req.user.role === "admin") {
+      const tickets = await prisma.ticket.findMany({
+        include: {
+          customer: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          technician: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          ticketServices: {
+            select: {
+              service: {
+                select: {
+                  id: true,
+                  title: true,
+                  price: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      res.json(tickets);
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado!", 404);
+    }
+
+    if (req.user.role === "customer") {
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          createdBy: user.id,
+        },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          technician: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          ticketServices: {
+            select: {
+              service: {
+                select: {
+                  id: true,
+                  title: true,
+                  price: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      res.json(tickets);
+      return;
+    }
+
+    if (req.user.role === "technician") {
+      const tickets = await prisma.ticket.findMany({
+        where: {
+          assignedTo: user.id,
+        },
+        include: {
+          customer: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          technician: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          ticketServices: {
+            select: {
+              service: {
+                select: {
+                  id: true,
+                  title: true,
+                  price: true,
+                },
+              },
+            },
+          },
+        },
+      });
+      res.json(tickets);
+      return;
+    }
+  }
+
   async create(req: Request, res: Response) {
     const bodySchema = z.object({
       title: z

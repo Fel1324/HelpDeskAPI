@@ -3,14 +3,14 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
 
 - *Feats iniciais: SignUp e SignIn (X)*
 
-- *Criar os middlewares de autenticação e autorização (X)* 
+- *Criar os middlewares de autenticação e autorização* 
 
 - Feats Admin:
   - > Técnicos:
-    - *Criar técnicos (X)*
-      - *Atribuir horário de disponibilidade e Senha (X)*
-    - *Listar técnicos (X)*
-    - *Editar técnicos (X)*
+    - *Criar técnicos*
+      - *Atribuir horário de disponibilidade e Senha*
+    - *Listar técnicos*
+    - *Editar técnicos*
 
   - > Serviços
     - *Criar Serviços*

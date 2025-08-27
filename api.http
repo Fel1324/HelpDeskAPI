@@ -7,8 +7,8 @@ POST http://localhost:3333/users
 Content-Type: application/json
 
 {
-  "name": "Rafael",
-  "email": "rafael@email.com",
+  "name": "Miguel",
+  "email": "miguel@email.com",
   "password": "123456"
 }
 
@@ -19,8 +19,8 @@ POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "user.adm@email.com",
-  "password": "admin123321"
+  "email": "rafael@email.com",
+  "password": "123456"
 }
 
 ################################################
@@ -105,6 +105,9 @@ Authorization: Bearer {{jwt_token}}
 
 ################################################
 # @name Tickets
+GET http://localhost:3333/tickets
+Authorization: Bearer {{jwt_token}}
+
 POST http://localhost:3333/tickets
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
