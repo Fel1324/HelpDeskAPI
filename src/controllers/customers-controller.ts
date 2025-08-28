@@ -86,9 +86,9 @@ export class CustomersController {
         where: {
           ticket: {
             createdBy: id,
-          }
-        }
-      })
+          },
+        },
+      });
 
       await tx.ticket.deleteMany({
         where: {

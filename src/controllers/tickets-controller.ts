@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
+import { TicketStatus } from "@prisma/client";
 import { z } from "zod";
 
 import { AppError } from "@/utils/app-error";
 import { prisma } from "@/database/prisma";
+
+const { emAtendimento, encerrado } = TicketStatus;
 
 export class TicketsController {
   async index(req: Request, res: Response) {
@@ -208,6 +211,63 @@ export class TicketsController {
     });
 
     res.status(201).json();
+    return;
+  }
+
+  async updateStatus(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
+
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido!"),
+    });
+
+    const bodySchema = z.object({
+      status: z.enum(
+        [emAtendimento, encerrado],
+        "Opções disponíveis: emAtendimento e encerrado."
+      ),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+    const { status } = bodySchema.parse(req.body);
+
+    let ticket;
+
+    if (req.user.role === "admin") {
+      ticket = await prisma.ticket.findUnique({
+        where: {
+          id,
+        },
+      });
+    } else if (req.user.role === "technician") {
+      ticket = await prisma.ticket.findFirst({
+        where: {
+          id,
+          assignedTo: req.user.id,
+        },
+      });
+    } else {
+      throw new AppError(
+        "Apenas administradores e técnicos podem alterar o status do chamado!"
+      );
+    }
+
+    if (!ticket) {
+      throw new AppError("Chamado não encontrado!", 404);
+    }
+
+    await prisma.ticket.update({
+      where: {
+        id: ticket.id,
+      },
+      data: {
+        status,
+      },
+    });
+
+    res.json();
     return;
   }
 }

@@ -19,8 +19,8 @@ POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "rafael@tech.com",
-  "password": "#técnicorafael123"
+  "email": "gabriel@tech.com",
+  "password": "#técnicogabriel123"
 }
 
 ################################################
@@ -119,4 +119,12 @@ Authorization: Bearer {{jwt_token}}
   "title": "Instalação de Rede",
   "description": "Instalação de rede via cabo",
   "serviceId": "f781e233-10df-42ab-9489-2bd626324e8b"
+}
+
+PATCH http://localhost:3333/tickets/7711be7f-636e-4915-a2f5-9871815cbf7a/status
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "status": "encerrado"
 }
