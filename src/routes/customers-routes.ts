@@ -10,5 +10,6 @@ customersRoutes.use(verifyUserAuthorization(["admin"]));
 
 customersRoutes.get("/", customersController.index);
 customersRoutes.put("/:id", customersController.update);
+customersRoutes.delete("/:id", customersController.remove);
 
 export { customersRoutes };

@@ -21,18 +21,18 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
   - > Clientes
     - *Listar clientes*
     - *Editar clientes*
-    - Excluir clientes
-      - Excluir seus chamados
+    - *Excluir clientes*
+      - *Excluir seus chamados*
 
   - > Chamados
-    - Listar todos os chamados
+    - *Listar todos os chamados*
     - Editar status dos chamados
 
 - Feats Cliente:
   - *Criar conta*
   - *Criar chamados*
     - *atribuir a um técnico disponível durante a criação do chamado*
-  - Visualizar seus chamados
+  - *Visualizar seus chamados*
   - Excluir a própria conta
     - Excluir seus chamados
   - Editar a própria conta
@@ -42,7 +42,7 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
   
 
 - Feats Técnicos:
-  - Listar seus chamados
+  - *Listar seus chamados*
   - Adicionar novos serviços aos chamados se for necessário
   - Quando for iniciado o atendimento o status do chamado deve mudar (em andamento)
   - Quando for encerrado o atendimento o status do chamado deve mudar (encerrado)

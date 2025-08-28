@@ -19,8 +19,8 @@ POST http://localhost:3333/sessions
 Content-Type: application/json
 
 {
-  "email": "rafael@email.com",
-  "password": "123456"
+  "email": "rafael@tech.com",
+  "password": "#técnicorafael123"
 }
 
 ################################################
@@ -102,6 +102,9 @@ Authorization: Bearer {{jwt_token}}
   "name": "Claúdio",
   "email": "claudio@client.com"
 }
+
+DELETE http://localhost:3333/customers/90fabf1f-50af-41bd-8110-3603115207ad
+Authorization: Bearer {{jwt_token}}
 
 ################################################
 # @name Tickets

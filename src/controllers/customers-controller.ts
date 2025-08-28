@@ -62,4 +62,48 @@ export class CustomersController {
     res.json();
     return;
   }
+
+  async remove(req: Request, res: Response) {
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido!"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const customer = await prisma.user.findUnique({
+      where: {
+        id,
+        role: "customer",
+      },
+    });
+
+    if (!customer) {
+      throw new AppError("Cliente não encontrado!", 404);
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.ticketService.deleteMany({
+        where: {
+          ticket: {
+            createdBy: id,
+          }
+        }
+      })
+
+      await tx.ticket.deleteMany({
+        where: {
+          createdBy: id,
+        },
+      });
+
+      await tx.user.delete({
+        where: {
+          id,
+        },
+      });
+    });
+
+    res.json();
+    return;
+  }
 }
