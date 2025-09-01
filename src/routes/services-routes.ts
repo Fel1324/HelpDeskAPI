@@ -14,9 +14,14 @@ servicesRoutes.post(
   additionalsServicesController.create
 );
 
+servicesRoutes.delete(
+  "/additional/delete/:ticketId/:serviceId",
+  verifyUserAuthorization(["technician"]),
+  additionalsServicesController.remove
+);
+
 servicesRoutes.get(
   "/",
-  verifyUserAuthorization(["admin", "customer"]),
   servicesController.index
 );
 

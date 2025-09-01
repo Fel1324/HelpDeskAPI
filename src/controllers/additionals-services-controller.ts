@@ -10,11 +10,11 @@ export class AdditionalsServicesController {
       throw new AppError("Não autorizado", 401);
     }
 
-    const paramSchema = z.object({
+    const paramsSchema = z.object({
       ticketId: z.uuid("Id inválido!"),
     });
 
-    const { ticketId } = paramSchema.parse(req.params);
+    const { ticketId } = paramsSchema.parse(req.params);
 
     const ticket = await prisma.ticket.findUnique({
       where: {
@@ -28,32 +28,103 @@ export class AdditionalsServicesController {
     }
 
     const bodySchema = z.object({
-      title: z
-        .string("Título do serviço é obrigatório!")
-        .trim()
-        .min(2, "O título do serviço deve ter pelo menos 2 caracteres!"),
-      price: z
-        .number("Preço do produto é obrigatório!")
-        .positive("O preço precisa ser maior do que zero!"),
+      serviceId: z.uuid("Id inválido!"),
     });
 
-    const { title, price } = bodySchema.parse(req.body);
+    const { serviceId } = bodySchema.parse(req.body);
 
-    const additionalService = await prisma.service.create({
+    const service = await prisma.service.findUnique({
+      where: {
+        id: serviceId,
+      },
+    });
+
+    if (!service) {
+      throw new AppError("Serviço não encontrado!", 404);
+    }
+
+    const existingService = await prisma.ticketService.findFirst({
+      where: {
+        ticketId,
+        serviceId,
+      },
+    });
+
+    if (existingService) {
+      throw new AppError("Serviço já adicionado ao chamado!", 400);
+    }
+
+    await prisma.ticketService.create({
       data: {
-        title,
-        price,
-        createdBy: req.user.id,
+        ticketId,
+        serviceId,
+        isAdditional: true,
+      },
+    });
+
+    res.status(201).json();
+    return;
+  }
+
+  async remove(req: Request, res: Response) {
+    if (!req.user || req.user.role !== "technician") {
+      throw new AppError("Não autorizado", 401);
+    }
+
+    const paramsSchema = z.object({
+      ticketId: z.uuid("Id inválido!"),
+      serviceId: z.uuid("Id inválido!"),
+    });
+
+    const { ticketId, serviceId } = paramsSchema.parse(req.params);
+
+    const ticket = await prisma.ticket.findUnique({
+      where: {
+        id: ticketId,
+        assignedTo: req.user.id,
+      },
+    });
+
+    if (!ticket) {
+      throw new AppError("Chamado não encontrado!", 404);
+    }
+
+    const service = await prisma.service.findUnique({
+      where: {
+        id: serviceId,
         serviceTickets: {
-          create: {
-            ticketId,
+          some: {
             isAdditional: true,
           },
         },
       },
     });
 
-    res.status(201).json(additionalService);
+    if (!service) {
+      throw new AppError("Serviço não encontrado!", 404);
+    }
+
+    const existingService = await prisma.ticketService.findFirst({
+      where: {
+        ticketId,
+        serviceId,
+      },
+    });
+
+    if (!existingService) {
+      throw new AppError("Serviço não adicionado ao chamado!");
+    }
+
+    await prisma.ticketService.delete({
+      where: {
+        ticketId_serviceId: {
+          ticketId,
+          serviceId,
+        },
+      },
+    });
+
+    res.json();
     return;
   }
 }

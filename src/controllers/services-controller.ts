@@ -20,7 +20,7 @@ export class ServicesController {
       return;
     }
 
-    if (req.user.role === "customer") {
+    if (req.user.role === "customer" || req.user.role === "technician") {
       const services = await prisma.service.findMany({
         select: {
           id: true,

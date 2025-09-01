@@ -7,6 +7,7 @@ const ticketsRoutes = Router();
 const ticketsController = new TicketsController();
 
 ticketsRoutes.get("/", ticketsController.index);
+ticketsRoutes.get("/:id", ticketsController.show);
 
 ticketsRoutes.post(
   "/",

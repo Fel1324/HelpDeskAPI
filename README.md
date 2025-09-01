@@ -17,7 +17,7 @@ Projeto desenvolvimento como desafio prático final pela formação Full-Stack d
 - Feats Técnicos:
   - Editar a própria conta
     - Upload de foto de perfil
-  - Adicionar novos serviços aos chamados se for necessário
+  - *Adicionar novos serviços aos chamados se for necessário*
   - *Listar seus chamados*
   - *Quando for iniciado o atendimento o status do chamado deve mudar (em andamento)*
   - *Quando for encerrado o atendimento o status do chamado deve mudar (encerrado)*

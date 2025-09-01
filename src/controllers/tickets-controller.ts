@@ -135,6 +135,70 @@ export class TicketsController {
     }
   }
 
+  async show(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
+
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido!"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const ticketDetails = await prisma.ticket.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        customer: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        technician: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        ticketServices: {
+          select: {
+            service: {
+              select: {
+                id: true,
+                title: true,
+                price: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!ticketDetails) {
+      throw new AppError("Chamado não encontrado!", 404);
+    }
+
+    if (
+      req.user.role === "technician" &&
+      req.user.id !== ticketDetails.assignedTo
+    ) {
+      throw new AppError("Técnico não autorizado a acessar esse chamado!", 403);
+    }
+
+    if (
+      req.user.role === "customer" &&
+      req.user.id !== ticketDetails.createdBy
+    ) {
+      throw new AppError("Cliente não autorizado a acessar esse chamado!", 403);
+    }
+
+    res.json(ticketDetails);
+    return;
+  }
+
   async create(req: Request, res: Response) {
     const bodySchema = z.object({
       title: z
