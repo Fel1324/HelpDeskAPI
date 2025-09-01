@@ -31,7 +31,7 @@ model User {
   password String
   avatar String?
   role UserRole
-  lastAssignedAt DateTime? @map("last_assigned_at")
+  lastAssignedAt DateTime @map("last_assigned_at") @default("1970-01-01T00:00:00Z")
 
   ticketsAsCustomer Ticket[] @relation("CustomerRelation")
   ticketsAsTechnicians Ticket[] @relation("TechnicianRelation")
@@ -105,6 +105,7 @@ model Service {
 model TicketService {
   ticketId String @map("ticket_id")
   serviceId String @map("service_id")
+  isAdditional Boolean @map("is_additional") @default(false)
 
   ticket Ticket @relation(fields: [ticketId], references: [id])
   service Service @relation(fields: [serviceId], references: [id])

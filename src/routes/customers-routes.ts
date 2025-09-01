@@ -6,10 +6,22 @@ import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization
 const customersRoutes = Router();
 const customersController = new CustomersController();
 
-customersRoutes.use(verifyUserAuthorization(["admin"]));
+customersRoutes.get(
+  "/",
+  verifyUserAuthorization(["admin"]),
+  customersController.index
+);
 
-customersRoutes.get("/", customersController.index);
-customersRoutes.put("/:id", customersController.update);
-customersRoutes.delete("/:id", customersController.remove);
+customersRoutes.put(
+  "/:id",
+  verifyUserAuthorization(["admin"]),
+  customersController.update
+);
+
+customersRoutes.delete(
+  "/:id",
+  verifyUserAuthorization(["admin", "customer"]),
+  customersController.remove
+);
 
 export { customersRoutes };

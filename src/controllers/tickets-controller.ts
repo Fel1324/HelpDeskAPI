@@ -40,6 +40,9 @@ export class TicketsController {
             },
           },
         },
+        orderBy: {
+          updatedAt: "desc",
+        },
       });
       res.json(tickets);
       return;
@@ -85,6 +88,9 @@ export class TicketsController {
             },
           },
         },
+        orderBy: {
+          updatedAt: "desc",
+        },
       });
       res.json(tickets);
       return;
@@ -119,6 +125,9 @@ export class TicketsController {
               },
             },
           },
+        },
+        orderBy: {
+          updatedAt: "desc",
         },
       });
       res.json(tickets);
@@ -256,6 +265,14 @@ export class TicketsController {
 
     if (!ticket) {
       throw new AppError("Chamado não encontrado!", 404);
+    }
+
+    if (status === ticket.status) {
+      throw new AppError(
+        `O chamado já está ${
+          status === "emAtendimento" ? "em atendimento" : "encerrado"
+        }!`
+      );
     }
 
     await prisma.ticket.update({

@@ -7,11 +7,13 @@ const ticketsRoutes = Router();
 const ticketsController = new TicketsController();
 
 ticketsRoutes.get("/", ticketsController.index);
+
 ticketsRoutes.post(
   "/",
   verifyUserAuthorization(["customer"]),
   ticketsController.create
 );
+
 ticketsRoutes.patch(
   "/:id/status",
   verifyUserAuthorization(["admin", "technician"]),

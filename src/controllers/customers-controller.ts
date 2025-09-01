@@ -13,6 +13,9 @@ export class CustomersController {
       orderBy: {
         updatedAt: "desc",
       },
+      omit: {
+        password: true,
+      },
     });
 
     res.json(customers);
@@ -64,6 +67,10 @@ export class CustomersController {
   }
 
   async remove(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
+
     const paramsSchema = z.object({
       id: z.uuid("Id inválido!"),
     });
@@ -79,6 +86,13 @@ export class CustomersController {
 
     if (!customer) {
       throw new AppError("Cliente não encontrado!", 404);
+    }
+
+    if (req.user.role === "customer" && req.user.id !== id) {
+      throw new AppError(
+        "Você não tem permissão para excluir esta conta!",
+        403
+      );
     }
 
     await prisma.$transaction(async (tx) => {

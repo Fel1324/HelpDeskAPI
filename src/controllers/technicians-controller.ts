@@ -5,7 +5,7 @@ import { z } from "zod";
 import { prisma } from "@/database/prisma";
 import { AppError } from "@/utils/app-error";
 
-const COMERCIAL_TIME = [1, 2, 3, 4, 5, 8, 9, 10, 11, 18];
+const COMERCIAL_TIME = [2, 3, 4, 5, 6, 8, 9, 10, 11, 12];
 
 export class TechniciansController {
   async index(req: Request, res: Response) {
@@ -82,6 +82,7 @@ export class TechniciansController {
 
     if (!newTimeIds.length) {
       newTimeIds.push(...COMERCIAL_TIME);
+      console.log(newTimeIds);
     }
 
     const tech = await prisma.user.create({
@@ -93,7 +94,7 @@ export class TechniciansController {
         technicianTimes: {
           createMany: {
             data: newTimeIds.map((id) => ({
-              timeId: id,
+              timeId: id,              
             })),
           },
         },
