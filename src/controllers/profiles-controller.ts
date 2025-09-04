@@ -64,9 +64,33 @@ export class ProfilesController {
       name: z
         .string("Nome é obrigatório")
         .min(3, "Nome deve conter pelo menos 3 caracteres"),
-      email: z.email("E-mail inválido"),
-      avatar: z.url("Avatar deve ser uma URL válida").optional(),
+      email: z.email("E-mail inválido").toLowerCase(),
     });
+
+    const { email, name } = bodySchema.parse(req.body);
+
+    const userWithSameEmail = await prisma.user.findFirst({
+      where: {
+        email,
+      },
+    });
+
+    if (req.user.id !== userWithSameEmail?.id && userWithSameEmail) {
+      throw new AppError("Já existe um usuário com este E-mail!");
+    }
+
+    await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        email,
+      },
+    });
+
+    res.json();
+    return;
   }
 
   async updatePassword(req: Request, res: Response) {

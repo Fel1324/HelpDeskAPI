@@ -11,6 +11,6 @@ const uploadsController = new UploadsController();
 const upload = multer(uploadConfig.MULTER);
 
 uploadsRoutes.use(verifyUserAuthorization(["technician", "customer"]));
-uploadsRoutes.post("/", upload.single("file"), uploadsController.create);
+uploadsRoutes.post("/:id", upload.single("file"), uploadsController.create);
 
 export { uploadsRoutes };
