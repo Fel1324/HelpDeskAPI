@@ -8,6 +8,7 @@ import { servicesRoutes } from "./services-routes";
 import { customersRoutes } from "./customers-routes";
 import { ticketsRoutes } from "./tickets-routes";
 import { profilesRoutes } from "./profiles-routes";
+import { uploadsRoutes } from "./uploads-routes";
 
 import { ensureUserAuthentication } from "@/middlewares/ensure-user-authentication";
 
@@ -24,5 +25,7 @@ routes.use("/services", servicesRoutes);
 routes.use("/customers", customersRoutes);
 routes.use("/tickets", ticketsRoutes);
 routes.use("/profiles", profilesRoutes);
+
+routes.use("/uploads", uploadsRoutes);
 
 export { routes };

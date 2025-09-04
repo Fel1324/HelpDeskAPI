@@ -35,9 +35,39 @@ export class ProfilesController {
     return;
   }
 
-  // async update(req: Request, res: Response){
+  async update(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
 
-  // }
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido!"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!user) {
+      throw new AppError("Usuário não encontrado!", 404);
+    }
+
+    if (req.user.id !== user.id) {
+      throw new AppError("Não autorizado a acessar esse perfil!", 403);
+    }
+
+    const bodySchema = z.object({
+      name: z
+        .string("Nome é obrigatório")
+        .min(3, "Nome deve conter pelo menos 3 caracteres"),
+      email: z.email("E-mail inválido"),
+      avatar: z.url("Avatar deve ser uma URL válida").optional(),
+    });
+  }
 
   async updatePassword(req: Request, res: Response) {
     if (!req.user) {
