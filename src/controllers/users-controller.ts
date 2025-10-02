@@ -28,8 +28,7 @@ export class UsersController {
 
     if (userWithSameEmail) {
       throw new AppError(
-        "E-mail inválido! Já existe um usuário com este e-mail!",
-        409
+        "Já existe um usuário com este e-mail!", 409
       );
     }
 

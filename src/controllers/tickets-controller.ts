@@ -20,12 +20,14 @@ export class TicketsController {
             select: {
               id: true,
               name: true,
+              avatar: true,
             },
           },
           technician: {
             select: {
               id: true,
               name: true,
+              avatar: true,
             },
           },
           ticketServices: {
@@ -161,9 +163,10 @@ export class TicketsController {
           select: {
             id: true,
             name: true,
+            email: true,
           },
         },
-        ticketServices: {
+        ticketServices: {          
           select: {
             service: {
               select: {
@@ -172,6 +175,7 @@ export class TicketsController {
                 price: true,
               },
             },
+            isAdditional: true
           },
         },
       },

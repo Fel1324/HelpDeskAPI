@@ -29,6 +29,6 @@ servicesRoutes.use(verifyUserAuthorization(["admin"]));
 
 servicesRoutes.post("/", servicesController.create);
 servicesRoutes.put("/:id", servicesController.update);
-servicesRoutes.patch("/:id", servicesController.updateStatus);
+servicesRoutes.patch("/:id/status", servicesController.updateStatus);
 
 export { servicesRoutes };
