@@ -12,6 +12,12 @@ customersRoutes.get(
   customersController.index
 );
 
+customersRoutes.get(
+  "/:id",
+  verifyUserAuthorization(["admin"]),
+  customersController.show
+)
+
 customersRoutes.put(
   "/:id",
   verifyUserAuthorization(["admin"]),

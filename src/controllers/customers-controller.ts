@@ -22,6 +22,39 @@ export class CustomersController {
     return;
   }
 
+  async show(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
+
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido!"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const customer = await prisma.user.findUnique({
+      where: {
+        id,
+        role: "customer",
+      },
+      omit: {
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+        lastAssignedAt: true,
+        role: true,
+      }
+    });
+
+    if (!customer) {
+      throw new AppError("Cliente não encontrado!", 404);
+    }
+    
+    res.json(customer);
+    return;
+  }
+
   async update(req: Request, res: Response) {
     const paramsSchema = z.object({
       id: z.uuid("Id inválido!"),
