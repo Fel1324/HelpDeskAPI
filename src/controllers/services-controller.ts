@@ -16,8 +16,8 @@ export class ServicesController {
     if (req.user.role === "admin") {
       const services = await prisma.service.findMany({
         orderBy: {
-          title: "asc"
-        }
+          updatedAt: "desc"
+        },
       });
 
       res.json(services);
@@ -30,6 +30,9 @@ export class ServicesController {
           id: true,
           title: true,
           price: true,
+        },
+        orderBy: {
+          updatedAt: "desc"
         },
       });
 
