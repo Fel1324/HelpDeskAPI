@@ -27,6 +27,7 @@ servicesRoutes.get(
 
 servicesRoutes.use(verifyUserAuthorization(["admin"]));
 
+servicesRoutes.get("/:id", servicesController.show);
 servicesRoutes.post("/", servicesController.create);
 servicesRoutes.put("/:id", servicesController.update);
 servicesRoutes.patch("/:id/status", servicesController.updateStatus);

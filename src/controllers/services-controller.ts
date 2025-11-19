@@ -16,7 +16,7 @@ export class ServicesController {
     if (req.user.role === "admin") {
       const services = await prisma.service.findMany({
         orderBy: {
-          updatedAt: "desc"
+          title: "asc"
         },
       });
 
@@ -32,13 +32,38 @@ export class ServicesController {
           price: true,
         },
         orderBy: {
-          updatedAt: "desc"
+          title: "asc"
         },
       });
 
       res.json(services);
       return;
     }
+  }
+
+  async show(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado!", 401);
+    }
+
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido!"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const service = await prisma.service.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!service) {
+      throw new AppError("Serviço não encontrado!", 404);
+    }
+    
+    res.json(service);
+    return;
   }
 
   async create(req: Request, res: Response) {
