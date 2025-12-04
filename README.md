@@ -1,6 +1,6 @@
 # 🚀 HelpDeskAPI
 
-Uma API RESTful para gestão de chamados, desenvolvida com Node.js, Express, Prisma ORM e autenticação JWT.
+API RESTful para gestão de chamados, desenvolvida com Node.js, Express, Prisma ORM e autenticação JWT.
 
 <br>
 

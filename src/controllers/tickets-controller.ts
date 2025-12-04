@@ -256,8 +256,6 @@ export class TicketsController {
       },
     });
 
-    console.log(technician);
-
     if (!technician) {
       throw new AppError("Nenhum técnico disponível no momento!", 404);
     }
