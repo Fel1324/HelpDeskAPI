@@ -82,7 +82,6 @@ export class TechniciansController {
 
     if (!newTimeIds.length) {
       newTimeIds.push(...COMERCIAL_TIME);
-      console.log(newTimeIds);
     }
 
     const tech = await prisma.user.create({
