@@ -37,6 +37,41 @@ export class TechniciansController {
     return;
   }
 
+  async show(req: Request, res: Response) {
+    const paramsSchema = z.object({
+      id: z.uuid("Id inválido"),
+    });
+
+    const { id } = paramsSchema.parse(req.params);
+
+    const technician = await prisma.user.findFirst({
+      omit: {
+        password: true,
+      },
+      where: {
+        id,
+        role: "technician",
+      },
+      include: {
+        technicianTimes: {
+          select: {
+            time: {
+              select: {
+                time: true,
+                minutes: true,
+              },
+            },
+          },
+        },
+      }    
+    });
+
+    if (!technician) throw new AppError("Técnico não encontrado!", 404);
+
+    res.json(technician);
+    return;
+  }
+
   async create(req: Request, res: Response) {
     const bodySchema = z.object({
       name: z
