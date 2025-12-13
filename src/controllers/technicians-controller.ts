@@ -57,6 +57,7 @@ export class TechniciansController {
           select: {
             time: {
               select: {
+                id: true,
                 time: true,
                 minutes: true,
               },
@@ -173,10 +174,13 @@ export class TechniciansController {
             .int("Horário inválido! Horários disponíveis: 07:00 até 23:00")
             .positive("Horário inválido! Horários disponíveis: 07:00 até 23:00")
         )
-        .nonempty("Informe ao menos um horário!"),
     });
 
     const { name, email, timeIds } = bodySchema.parse(req.body);
+
+    if(timeIds.length === 0) {
+      throw new AppError("Informe ao menos um horário!");
+    }
 
     if (timeIds.find((time) => time > 17)) {
       throw new AppError(
