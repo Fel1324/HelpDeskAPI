@@ -26,6 +26,9 @@ export class ServicesController {
 
     if (req.user.role === "customer" || req.user.role === "technician") {
       const services = await prisma.service.findMany({
+        where: {
+          status: ativo,
+        },
         select: {
           id: true,
           title: true,
