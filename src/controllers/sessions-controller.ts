@@ -25,13 +25,13 @@ export class SessionsController {
     });
 
     if (!user) {
-      throw new AppError("E-mail e/ou senha inválida", 401);
+      throw new AppError("E-mail e/ou senha inválida");
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError("E-mail e/ou senha inválida", 401);
+      throw new AppError("E-mail e/ou senha inválida");
     }
 
     const { secret, expiresIn } = authConfig.jwt;

@@ -148,7 +148,7 @@ export class ProfilesController {
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError("Sua senha atual está incorreta!", 401);
+      throw new AppError("Sua senha atual está incorreta!", 403);
     }
 
     const hashedNewPassword = await hash(newPassword, 10);
