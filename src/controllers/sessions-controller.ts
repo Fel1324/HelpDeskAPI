@@ -14,8 +14,7 @@ export class SessionsController {
         .email("E-mail inválido, siga o modelo: email@example.com")
         .toLowerCase(),
       password: z
-        .string("Senha é obrigatória")
-        .min(6, "Senha deve conter pelo menos 6 caracteres"),
+        .string().nonempty("Senha é obrigatória"),
     });
 
     const { email, password } = bodySchema.parse(req.body);
