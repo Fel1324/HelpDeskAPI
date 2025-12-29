@@ -21,6 +21,24 @@ export class ProfilesController {
       where: {
         id,
       },
+      omit: {
+        password: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      include: {
+        technicianTimes: {
+          select: {
+            time: {
+              select: {
+                id: true,
+                time: true,
+                minutes: true,
+              }
+            }
+          }
+        }        
+      }
     });
 
     if (!user) {

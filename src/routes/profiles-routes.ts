@@ -6,9 +6,10 @@ import { verifyUserAuthorization } from "@/middlewares/verify-user-authorization
 const profilesRoutes = Router();
 const profilesController = new ProfilesController();
 
+profilesRoutes.get("/:id", verifyUserAuthorization(["technician"]), profilesController.show);
+
 profilesRoutes.use(verifyUserAuthorization(["technician", "customer"]));
 
-profilesRoutes.get("/:id", profilesController.show);
 profilesRoutes.put("/:id", profilesController.update);
 profilesRoutes.patch("/:id", profilesController.updatePassword);
 
